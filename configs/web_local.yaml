@@ -1,0 +1,34 @@
+# Configuração para `ocrhist web` neste host: pastas dentro do workspace
+# (o default aponta para ~/Desktop, indisponível neste ambiente).
+# Mesmo banco local — documentos e fila preservados.
+perfil: automatico
+render_dpi: 300
+entrada: data/entrada
+saida: data/saida_web
+banco: data/ocr_historico.sqlite3
+preprocessamento:
+  grayscale: true
+  deskew: true
+  clahe: false
+  denoise: leve
+  remover_fundo: false
+  upscale: 1.0
+  binarizacao: false
+reconhecimento:
+  engine: auto
+  idioma: por
+  oem: 1
+  psm: 3
+  modelo: best
+confianca:
+  limiar_alta: 0.7
+  limiar_revisao: 0.82
+# LLM ativado contra o servidor local existente (:8081, Qwen3-8B): o revisor
+# tenta Ollama e cai para OpenAI-local. Modo suggest_only: nunca altera texto.
+llm:
+  enabled: true
+  provider: ollama
+  model: huihui-qwen3-8b-abliterated-v2
+  base_url: http://127.0.0.1:8081
+  timeout_seconds: 300
+  mode: suggest_only

@@ -1,0 +1,18 @@
+[Unit]
+Description=DeepSeek-OCR-2 via llama-server (OCR Studio, CPU estavel)
+Documentation=file:///home/igor/ia-sh/OCR/scripts/servidor_deepseekocr2.sh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+WorkingDirectory=/home/igor/ia-sh/OCR
+ExecStart=/bin/bash scripts/servidor_deepseekocr2.sh --cpu --port 8084
+Restart=on-failure
+RestartSec=10
+# Limites honestos: modelo q8_0 (~3 GB) + mmproj (~0,5 GB) + KV.
+MemoryMax=12G
+CPUWeight=100
+
+[Install]
+WantedBy=default.target

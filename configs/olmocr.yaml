@@ -1,0 +1,36 @@
+# Perfil olmOCR: o VLM recebe a imagem colorida ORIGINAL (o bloco
+# preprocessamento abaixo é ignorado para este motor — cor ajuda o VLM).
+# Backend: Qwen3-VL-8B em :8082 (bash scripts/servidor_qwen3vl.sh).
+# O GGUF allenai/olmOCR-2-7B-1025 original não está presente neste host;
+# para usá-lo, baixe GGUF + mmproj e ajuste `model` abaixo.
+perfil: misto
+render_dpi: 300
+preprocessamento:
+  grayscale: true
+  deskew: true
+  clahe: false
+  denoise: leve
+  remover_fundo: false
+  upscale: 1.0
+  binarizacao: false
+reconhecimento:
+  engine: olmocr
+  idioma: por
+  oem: 1
+  psm: 3
+  modelo: Qwen3VL-8B-Instruct
+confianca:
+  limiar_alta: 0.70
+  limiar_revisao: 0.82
+llm:
+  enabled: false
+  provider: ollama
+  model: qwen2.5:7b-instruct
+  base_url: http://127.0.0.1:11434
+  timeout_seconds: 120
+  mode: suggest_only
+olmocr:
+  base_url: http://127.0.0.1:8082
+  model: Qwen3VL-8B-Instruct
+  timeout_seconds: 300
+  max_lado_px: 1024

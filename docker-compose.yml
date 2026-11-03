@@ -1,0 +1,19 @@
+# Serviço opcional do OCR Histórico BR (execução rootless).
+# Uso: docker compose up -d --build
+# O fluxo nativo continua sendo o principal; este perfil é conveniência.
+services:
+  ocr:
+    build: .
+    image: ocr-historico-br:local
+    environment:
+      OCRHIST_ENTRADA: /dados/entrada
+      OCRHIST_SAIDA: /dados/saida
+      OCRHIST_BANCO: /dados/banco/ocr_historico.sqlite3
+    volumes:
+      - ./data/entrada:/dados/entrada
+      - ./data/saida:/dados/saida
+      - ./data/banco:/dados/banco
+      - ./data/modelos:/dados/modelos
+    command: ["doctor"]
+    # Execução ad-hoc: docker compose run --rm ocr process /dados/entrada
+    profiles: ["ocr"]

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OCR Studio — Converter (estilo ABBYY × cores Google Colab)</title>
+<style>
+/* ===== 0. Tokens Google Colab + base ===== */
+:root{
+  --colab-orange:#F9AB00; --colab-orange-dark:#F29900; --colab-orange-soft:#FFF8E1;
+  --colab-blue:#1A73E8; --bg:#FFFFFF; --surface:#F8F9FA; --border:#DADCE0;
+  --text:#3C4043; --text-2:#5F6368; --success:#188038; --error:#D93025; --warn-soft:#FEEFC3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+:focus-visible{outline:2px solid var(--colab-blue);outline-offset:2px;border-radius:4px}
+
+/* ===== 1. Barra superior (64px) ===== */
+header{height:64px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;position:sticky;top:0;z-index:20}
+header .container{width:100%;display:flex;align-items:center;gap:32px}
+.logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:500;white-space:nowrap}
+.logo-mark{width:34px;height:34px;border-radius:8px;background:var(--colab-orange);display:flex;align-items:center;justify-content:center;color:#202124;font-weight:700;font-size:15px}
+nav{display:flex;gap:4px;flex:1}
+nav a{padding:20px 14px 17px;text-decoration:none;color:var(--text-2);font-weight:500;border-bottom:3px solid transparent}
+nav a:hover{color:var(--text)}
+nav a.active{color:var(--text);border-bottom-color:var(--colab-orange)}
+.quota{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:5px 12px;font-size:12px;color:var(--text-2);white-space:nowrap}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--colab-blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;margin-left:12px;flex-shrink:0}
+
+/* ===== 2. Barra de ferramentas secundária (estilo Colab) + progresso ===== */
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 0}
+.toolbar .container{display:flex;gap:8px;flex-wrap:wrap}
+.tool-btn{display:flex;align-items:center;gap:6px;background:transparent;border:1px solid transparent;border-radius:6px;padding:6px 12px;font-size:13px;color:var(--text);cursor:pointer;font-family:inherit}
+.tool-btn:hover{background:#fff;border-color:var(--border);box-shadow:0 1px 3px rgba(60,64,67,.15)}
+.progress-track{height:4px;background:#eee}
+.progress-bar{height:4px;width:38%;background:var(--colab-orange);border-radius:2px;animation:slide 2.2s ease-in-out infinite}
+.progress-track.idle .progress-bar{animation:none;width:0}
+@keyframes slide{0%{margin-left:0}50%{margin-left:62%}100%{margin-left:0}}
+
+/* ===== 3. Stepper do fluxo (estilo ABBYY) ===== */
+.stepper{display:flex;align-items:center;justify-content:center;padding:28px 0 8px;flex-wrap:wrap;gap:4px}
+.step{display:flex;align-items:center;gap:8px;color:var(--text-2);font-size:13px;font-weight:500}
+.step .num{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;background:#fff}
+.step.active{color:var(--text)}
+.step.active .num{background:var(--colab-orange);border-color:var(--colab-orange);color:#202124}
+.step.done .num{background:var(--success);border-color:var(--success);color:#fff}
+.step-line{width:64px;height:2px;background:var(--border);margin:0 12px}
+
+/* ===== Cartões genéricos ===== */
+.card{background:#fff;border:1px solid var(--border);border-radius:8px;margin:20px 0}
+.card:hover{box-shadow:0 1px 3px rgba(60,64,67,.2)}
+.card-head{padding:14px 20px;border-bottom:1px solid var(--border);font-size:15px;font-weight:500;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.card-body{padding:20px}
+
+/* ===== 4. Zona de upload (hero) ===== */
+.dropzone{border:2px dashed var(--border);border-radius:12px;padding:48px 24px;text-align:center;background:#fff;transition:border-color .15s,background .15s;cursor:pointer}
+.dropzone:hover,.dropzone.dragover{border-color:var(--colab-orange);background:var(--colab-orange-soft)}
+.dropzone h2{font-size:18px;font-weight:500;margin:14px 0 6px}
+.dropzone p{color:var(--text-2);font-size:13px;margin-bottom:18px}
+.btn-primary{background:var(--colab-orange);color:#202124;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+.btn-primary:hover{background:var(--colab-orange-dark)}
+.btn-outline{background:#fff;color:var(--colab-blue);border:1px solid var(--colab-blue);border-radius:8px;padding:7px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit}
+.btn-outline:hover{background:#F6FAFF}
+
+/* ===== 5. Painel de configuração ===== */
+.section-label{font-size:13px;font-weight:500;color:var(--text-2);margin:18px 0 10px;text-transform:uppercase;letter-spacing:.4px}
+.section-label:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--border);border-radius:16px;padding:6px 16px;font-size:13px;cursor:pointer;background:#fff;color:var(--text);user-select:none}
+.chip:hover{border-color:var(--colab-orange)}
+.chip.selected{border-color:var(--colab-orange);background:var(--colab-orange-soft);font-weight:500}
+.formats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.fmt{border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;background:#fff;font-size:13px}
+.fmt:hover{box-shadow:0 1px 3px rgba(60,64,67,.25)}
+.fmt.selected{border:2px solid var(--colab-orange);padding:13px;box-shadow:0 1px 3px rgba(60,64,67,.25)}
+.fmt-badge{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.fmt small{display:block;color:var(--text-2);font-size:11px;margin-top:2px}
+.b-docx{background:#1A73E8}.b-pdf{background:#D93025}.b-txt{background:#5F6368}.b-xlsx{background:#188038}.b-epub{background:#9334E6}.b-fb2{background:#E8710A}
+.toggles{display:flex;flex-wrap:wrap;gap:18px}
+.toggle{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.toggle input{accent-color:var(--colab-orange);width:16px;height:16px;cursor:pointer}
+
+/* ===== 6. Fila de documentos ===== */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th{text-align:left;font-size:12px;color:var(--text-2);font-weight:500;padding:10px 16px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px}
+td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--surface)}
+.thumb{width:34px;height:44px;border:1px solid var(--border);border-radius:4px;background:linear-gradient(#fff 60%,var(--surface));display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text-2);font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:12px;padding:3px 12px;font-size:12px;font-weight:500;white-space:nowrap}
+.pill::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.queue{color:var(--text-2);background:var(--surface)}
+.pill.proc{color:#B06000;background:var(--colab-orange-soft)}
+.pill.done{color:var(--success);background:#E6F4EA}
+.pill.err{color:var(--error);background:#FCE8E6}
+.mini-prog{width:80px;height:4px;background:var(--border);border-radius:2px;margin-top:5px;overflow:hidden}
+.mini-prog div{height:100%;width:62%;background:var(--colab-orange)}
+.row-actions{display:flex;gap:4px}
+.icon-btn{border:none;background:transparent;border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--text-2);font-size:14px;display:inline-flex;align-items:center;justify-content:center}
+.icon-btn:hover{background:var(--surface);color:var(--text)}
+.empty{padding:40px 20px;text-align:center;color:var(--text-2);font-size:13px}
+/* cartões mobile (abaixo de 900px) */
+.cards-mobile{display:none}
+@media (max-width:900px){
+  .table-wrap table{display:none}
+  .cards-mobile{display:grid;gap:12px;padding:16px}
+  .doc-card{border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;gap:12px;align-items:flex-start}
+  .doc-card .meta{flex:1}
+  .doc-card .meta b{display:block;font-size:13px}
+  .doc-card .meta span{font-size:12px;color:var(--text-2)}
+}
+
+/* ===== 7. Visualizador / editor 50/50 ===== */
+.editor{display:grid;grid-template-columns:1fr 1fr;min-height:380px}
+.pane{border-right:1px solid var(--border);position:relative;min-width:0}
+.pane:last-child{border-right:none}
+.pane-head{padding:10px 16px;font-size:12px;font-weight:500;color:var(--text-2);border-bottom:1px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.scan-view{background:var(--surface);padding:28px;display:flex;justify-content:center;min-height:340px}
+.page{background:#fff;width:78%;min-height:290px;box-shadow:0 1px 4px rgba(60,64,67,.35);padding:26px 22px}
+.line{height:7px;border-radius:3px;background:#E8EAED;margin-bottom:11px}
+.line.w60{width:60%}.line.w85{width:85%}.line.w45{width:45%}.line.w92{width:92%}
+.zoom{position:absolute;top:52px;right:12px;background:#fff;border:1px solid var(--border);border-radius:6px;display:flex;flex-direction:column;overflow:hidden}
+.zoom button{border:none;background:#fff;padding:5px 10px;cursor:pointer;font-size:13px;color:var(--text)}
+.zoom button:hover{background:var(--surface)}
+.ocr-text{background:#F7F7F7;padding:22px 24px;font-family:'Roboto Mono',ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.8;color:var(--text);min-height:340px;outline:none;white-space:pre-wrap}
+mark.low{background:var(--warn-soft);border-bottom:2px dashed var(--colab-orange);padding:0 1px;border-radius:2px}
+
+/* ===== Toasts (canto inferior esquerdo) ===== */
+#toasts{position:fixed;left:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:50}
+.toast{background:#202124;color:#fff;border-radius:8px;padding:12px 18px;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;gap:10px;align-items:center;animation:in .2s ease-out}
+.toast.ok{border-left:4px solid var(--success)}
+.toast.err{border-left:4px solid var(--error)}
+.toast.info{border-left:4px solid var(--colab-orange)}
+@keyframes in{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+
+/* ===== 8. Rodapé ===== */
+footer{background:var(--surface);border-top:1px solid var(--border);margin-top:28px;padding:16px 0}
+footer .container{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--text-2)}
+footer a{color:var(--colab-blue);text-decoration:none;margin-right:18px}
+footer a:hover{text-decoration:underline}
+
+@media (max-width:900px){
+  .editor{grid-template-columns:1fr}
+  .pane{border-right:none;border-bottom:1px solid var(--border)}
+  .pane:last-child{border-bottom:none}
+  nav{display:none}
+  .step-line{width:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- 1. Barra superior -->
+<header>
+  <div class="container">
+    <div class="logo"><span class="logo-mark" aria-hidden="true">⌗</span> OCR Studio</div>
+    <nav aria-label="Navegação principal">
+      <a href="#" class="active" aria-current="page">Converter</a>
+      <a href="#">Meus documentos</a>
+    </nav>
+    <span class="quota" title="Sua cota mensal">32 páginas restantes</span>
+    <div class="avatar" title="Conta">IE</div>
+  </div>
+</header>
+
+<!-- 2. Barra de ferramentas estilo Colab -->
+<div class="toolbar">
+  <div class="container" role="toolbar" aria-label="Ações de documentos">
+    <button class="tool-btn" id="btnUpload">＋ Enviar arquivos</button>
+    <button class="tool-btn" id="btnRepro">⟳ Reprocessar</button>
+    <button class="tool-btn" id="btnDlAll">⬇ Baixar tudo</button>
+  </div>
+</div>
+<div class="progress-track" id="progressTrack" aria-hidden="true"><div class="progress-bar"></div></div>
+
+<div class="container">
+
+  <!-- 3. Stepper do fluxo -->
+  <div class="stepper" aria-label="Etapas do fluxo">
+    <div class="step done"><span class="num" aria-hidden="true">✓</span> Enviar</div>
+    <div class="step-line" aria-hidden="true"></div>
+    <div class="step active" aria-current="step"><span class="num" aria-hidden="true">2</span> Configurar</div>
+    <div class="step-line" aria-hidden="true"></div>
+    <div class="step"><span class="num" aria-hidden="true">3</span> Converter e baixar</div>
+  </div>
+
+  <!-- 4. Zona de upload -->
+  <section class="card" style="border:none;box-shadow:none" aria-label="Envio de arquivos">
+    <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Arraste PDFs ou imagens aqui, ou pressione Enter para selecionar arquivos">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#F9AB00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M16 16l-4-4-4 4"/><path d="M12 12v9"/>
+        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+      </svg>
+      <h2>Arraste PDFs ou imagens aqui</h2>
+      <p>PDF, JPG, PNG, TIFF, BMP — até 100 MB por arquivo</p>
+      <button class="btn-primary" id="btnPick" type="button">Selecionar arquivos</button>
+      <input type="file" id="fileInput" hidden multiple accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif,.bmp">
+    </div>
+  </section>
+
+  <!-- 5. Configuração de conversão -->
+  <section class="card" aria-label="Configuração de conversão">
+    <div class="card-head">Configuração de conversão</div>
+    <div class="card-body">
+      <div class="section-label" id="lblLang">Idiomas do documento</div>
+      <div class="chips" role="group" aria-labelledby="lblLang">
+        <span class="chip" role="checkbox" aria-checked="false" tabindex="0">Automático</span>
+        <span class="chip selected" role="checkbox" aria-checked="true" tabindex="0">Português</span>
+        <span class="chip" role="checkbox" aria-checked="false" tabindex="0">English</span>
+        <span class="chip" role="checkbox" aria-checked="false" tabindex="0">Español</span>
+        <span class="chip" role="checkbox" aria-checked="false" tabindex="0">Français</span>
+        <span class="chip" role="checkbox" aria-checked="false" tabindex="0">Alemão</span>
+      </div>
+
+      <div class="section-label" id="lblFmt">Formato de saída</div>
+      <div class="formats" role="radiogroup" aria-labelledby="lblFmt">
+        <div class="fmt selected" role="radio" aria-checked="true" tabindex="0"><span class="fmt-badge b-docx">W</span><div>DOCX<small>Texto editável</small></div></div>
+        <div class="fmt" role="radio" aria-checked="false" tabindex="0"><span class="fmt-badge b-pdf">PDF</span><div>PDF pesquisável<small>Imagem + texto</small></div></div>
+        <div class="fmt" role="radio" aria-checked="false" tabindex="0"><span class="fmt-badge b-txt">TXT</span><div>TXT<small>Texto puro</small></div></div>
+        <div class="fmt" role="radio" aria-checked="false" tabindex="0"><span class="fmt-badge b-xlsx">X</span><div>XLSX<small>Planilha</small></div></div>
+        <div class="fmt" role="radio" aria-checked="false" tabindex="0"><span class="fmt-badge b-epub">EP</span><div>EPUB<small>e-book</small></div></div>
+        <div class="fmt" role="radio" aria-checked="false" tabindex="0"><span class="fmt-badge b-fb2">FB</span><div>FB2<small>e-book</small></div></div>
+      </div>
+
+      <div class="section-label">Opções de reconhecimento</div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" checked> Manter formatação</label>
+        <label class="toggle"><input type="checkbox" checked> Detectar tabelas</label>
+        <label class="toggle"><input type="checkbox"> Corrigir inclinação (deskew)</label>
+        <label class="toggle"><input type="checkbox"> Remover ruído</label>
+        <label class="toggle"><input type="checkbox"> OCR em duas passagens</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Fila de documentos -->
+  <section class="card" aria-label="Fila de documentos">
+    <div class="card-head">Fila de documentos <button class="btn-primary" style="padding:8px 18px" id="btnConvert" type="button">Converter tudo</button></div>
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th scope="col"></th><th scope="col">Nome</th><th scope="col">Tamanho</th><th scope="col">Páginas</th><th scope="col">Idioma</th><th scope="col">Status</th><th scope="col">Ações</th></tr>
+      </thead>
+      <tbody id="queueBody">
+        <tr>
+          <td><div class="thumb">PDF</div></td>
+          <td>jornal_1927_pag01.pdf</td><td>4,2 MB</td><td>1</td><td>Português</td>
+          <td><span class="pill done">Concluído</span></td>
+          <td><div class="row-actions">
+            <button class="icon-btn" title="Visualizar" aria-label="Visualizar jornal_1927_pag01.pdf">👁</button><button class="icon-btn" title="Baixar" aria-label="Baixar jornal_1927_pag01.pdf" data-dl>⬇</button><button class="icon-btn" title="Excluir" aria-label="Excluir jornal_1927_pag01.pdf" data-del>✕</button>
+          </div></td>
+        </tr>
+        <tr>
+          <td><div class="thumb">JPG</div></td>
+          <td>carta_manuscrita_03.jpg</td><td>1,8 MB</td><td>1</td><td>Português</td>
+          <td><span class="pill proc">Processando</span><div class="mini-prog" aria-hidden="true"><div></div></div></td>
+          <td><div class="row-actions"><button class="icon-btn" title="Cancelar" aria-label="Cancelar carta_manuscrita_03.jpg">✕</button></div></td>
+        </tr>
+        <tr>
+          <td><div class="thumb">TIFF</div></td>
+          <td>livro_atlas_cap2.tiff</td><td>18,6 MB</td><td>12</td><td>Espanhol</td>
+          <td><span class="pill queue">Na fila</span></td>
+          <td><div class="row-actions"><button class="icon-btn" title="Reprocessar" aria-label="Reprocessar livro_atlas_cap2.tiff" data-re>⟳</button><button class="icon-btn" title="Excluir" aria-label="Excluir livro_atlas_cap2.tiff" data-del>✕</button></div></td>
+        </tr>
+        <tr>
+          <td><div class="thumb">PNG</div></td>
+          <td>documento_danificado.png</td><td>950 KB</td><td>1</td><td>Automático</td>
+          <td><span class="pill err">Erro</span></td>
+          <td><div class="row-actions"><button class="icon-btn" title="Reprocessar" aria-label="Reprocessar documento_danificado.png" data-re>⟳</button><button class="icon-btn" title="Excluir" aria-label="Excluir documento_danificado.png" data-del>✕</button></div></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <!-- Versão em cartões para telas < 900px -->
+    <div class="cards-mobile" id="cardsMobile" aria-label="Documentos (cartões)"></div>
+    <div class="empty" id="emptyState" hidden>📄<br><br>Nenhum documento ainda — envie arquivos para começar.</div>
+  </section>
+
+  <!-- 7. Visualizador / editor dividido -->
+  <section class="card" aria-label="Visualizar resultado">
+    <div class="card-head">
+      <span>Visualizar resultado — jornal_1927_pag01.pdf</span>
+      <span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:12px;color:var(--text-2);font-weight:400">Confiança média: 96%</span>
+        <button class="btn-outline" id="btnCopy" type="button">Copiar</button>
+        <button class="btn-outline" id="btnDl" type="button">Baixar</button>
+      </span>
+    </div>
+    <div class="editor">
+      <div class="pane">
+        <div class="pane-head"><span>Original</span><span id="zoomLabel">100%</span></div>
+        <div class="scan-view">
+          <div class="page" id="scanPage" aria-label="Imagem original digitalizada (simulação)">
+            <div class="line w60"></div><div class="line w92"></div><div class="line w85"></div>
+            <div class="line w92"></div><div class="line w45"></div><div class="line w85"></div>
+            <div class="line w92"></div><div class="line w60"></div><div class="line w85"></div>
+            <div class="line w45"></div>
+          </div>
+        </div>
+        <div class="zoom" role="group" aria-label="Controles de zoom">
+          <button id="zoomIn" aria-label="Aproximar">＋</button>
+          <button id="zoomOut" aria-label="Afastar">−</button>
+          <button id="zoomFit" aria-label="Ajustar à tela">⤢</button>
+        </div>
+      </div>
+      <div class="pane">
+        <div class="pane-head"><span>Texto reconhecido (editável)</span><span>3 palavras &lt; 80%</span></div>
+        <div class="ocr-text" id="ocrText" contenteditable="true" spellcheck="false" aria-label="Texto reconhecido editável">O DIARIO DA MANHÃ
+
+Rio de Janeiro, 14 de março de 1927
+
+Na sessão de hontem, a Camara dos
+<mark class="low" title="Confiança: 62%">Srs.</mark> Deputados discutiu longamente
+o projecto de lei sobre a
+<mark class="low" title="Confiança: 58%">illuminção</mark> publica do districto
+federal, approvando-o em segunda
+votação por ampla <mark class="low" title="Confiança: 74%">maioria.</mark></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 8. Rodapé -->
+<footer>
+  <div class="container">
+    <span><a href="#">Ajuda</a><a href="#">API</a><a href="#">Termos</a></span>
+    <span>OCR Studio v0.1 — protótipo de interface</span>
+  </div>
+</footer>
+
+<!-- Toasts de feedback -->
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+// ===== Interações do protótipo (sem backend) =====
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+
+// Toasts no canto inferior esquerdo
+function toast(msg, type='info'){
+  const box = $('#toasts');
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = msg;
+  box.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(), 320); }, 3400);
+}
+
+// Chips de idioma: múltipla seleção, com teclado
+$$('.chip').forEach(c=>{
+  const toggle = ()=>{
+    c.classList.toggle('selected');
+    c.setAttribute('aria-checked', c.classList.contains('selected'));
+  };
+  c.addEventListener('click', toggle);
+  c.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(); } });
+});
+
+// Cartões de formato: seleção única, com teclado
+$$('.fmt').forEach(f=>{
+  const select = ()=>{
+    $$('.fmt').forEach(x=>{ x.classList.remove('selected'); x.setAttribute('aria-checked','false'); });
+    f.classList.add('selected'); f.setAttribute('aria-checked','true');
+  };
+  f.addEventListener('click', select);
+  f.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); select(); } });
+});
+
+// Upload: input + arrastar e soltar
+const dz = $('#dropzone'), fi = $('#fileInput');
+$('#btnPick').addEventListener('click', e=>{ e.stopPropagation(); fi.click(); });
+$('#btnUpload').addEventListener('click', ()=>fi.click());
+dz.addEventListener('click', ()=>fi.click());
+dz.addEventListener('keydown', e=>{ if(e.key==='Enter'){ fi.click(); } });
+['dragover','dragenter'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('dragover'); }));
+['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('dragover'); }));
+dz.addEventListener('drop', e=>{
+  const files = [...(e.dataTransfer.files||[])];
+  if(files.length) toast(`${files.length} arquivo(s) adicionado(s) à fila`, 'info');
+});
+fi.addEventListener('change', ()=>{
+  if(fi.files.length) toast(`${fi.files.length} arquivo(s) adicionado(s) à fila`, 'info');
+  fi.value='';
+});
+
+// Ações da fila (dados fictícios)
+$('#btnConvert').addEventListener('click', ()=>toast('Conversão iniciada para 2 documento(s)', 'info'));
+$('#btnRepro').addEventListener('click', ()=>toast('Reprocessando documentos com erro…', 'info'));
+$('#btnDlAll').addEventListener('click', ()=>toast('Conversão concluída — baixando tudo', 'ok'));
+document.addEventListener('click', e=>{
+  if(e.target.closest('[data-dl]')) toast('Download iniciado', 'ok');
+  if(e.target.closest('[data-re]')) toast('Documento enviado para reprocessamento', 'info');
+  if(e.target.closest('[data-del]')) toast('Documento excluído', 'info');
+});
+
+// Copiar / baixar texto OCR
+$('#btnCopy').addEventListener('click', async ()=>{
+  try { await navigator.clipboard.writeText($('#ocrText').innerText); toast('Texto copiado', 'ok'); }
+  catch { toast('Não foi possível copiar', 'err'); }
+});
+$('#btnDl').addEventListener('click', ()=>{
+  const blob = new Blob([$('#ocrText').innerText], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'ocr-resultado.txt'; a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Conversão concluída — arquivo baixado', 'ok');
+});
+
+// Zoom da página digitalizada (simulação)
+let zoom = 100;
+const page = $('#scanPage'), zl = $('#zoomLabel');
+function setZoom(v){ zoom = Math.min(200, Math.max(50, v)); page.style.width = (78 * zoom/100) + '%'; zl.textContent = zoom + '%'; }
+$('#zoomIn').addEventListener('click', ()=>setZoom(zoom+25));
+$('#zoomOut').addEventListener('click', ()=>setZoom(zoom-25));
+$('#zoomFit').addEventListener('click', ()=>setZoom(100));
+
+// Espelho da tabela em cartões (mobile < 900px)
+function buildCards(){
+  const rows = $$('#queueBody tr');
+  $('#cardsMobile').innerHTML = rows.map(tr=>{
+    const t = [...tr.querySelectorAll('td')].map(td=>td.innerText.trim());
+    return `<div class="doc-card"><div class="thumb">${t[0]}</div>
+      <div class="meta"><b>${t[1]}</b><span>${t[2]} · ${t[3]} pág. · ${t[4]}</span><div style="margin-top:6px">${tr.querySelector('td:nth-child(6)').innerHTML}</div></div></div>`;
+  }).join('');
+}
+buildCards();
+</script>
+</body>
+</html>
