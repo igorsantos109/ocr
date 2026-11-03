@@ -1,0 +1,207 @@
+{
+  "schema_version": "1.0",
+  "documento": {
+    "nome_original": "IMG_20260218_194359.jpg",
+    "sha256": "88a65cbade56601bcfa49939145c19352947210b3baa77565525638394937947",
+    "perfil": "automatico",
+    "processado_em": "2026-09-09T22:25:49.139576-03:00"
+  },
+  "execucao": {
+    "motores": [
+      "paddleocr"
+    ],
+    "modelo": "pt_best",
+    "configuracao": {
+      "render_dpi": 300,
+      "perfil": "automatico",
+      "inventario": {
+        "caminho_relativo": "upload_web/IMG_20260218_194359.jpg",
+        "tamanho_bytes": 106933,
+        "sha256": "88a65cbade56601bcfa49939145c19352947210b3baa77565525638394937947"
+      },
+      "preservacao": {
+        "modo": "none",
+        "destino": null,
+        "verificado": false
+      }
+    }
+  },
+  "paginas": [
+    {
+      "numero": 1,
+      "qualidade": {
+        "largura": 701,
+        "altura": 934,
+        "dpi": 72,
+        "nitidez": null,
+        "contraste": null
+      },
+      "texto_bruto": "Qaidaddi\nI.Lua\nCASA\nCasa\nCAL-COLCU.CAO\nCASA E DE TIJOLO\nfamuadeC\nLou\nJEcAtoahad\nBIDE\nRUJA\nPObo\n3. Lua  dusimh:\nCOCO\nCOLA\nCOPO",
+      "texto_diplomatico": "Qaidaddi\nI.Lua\nCASA\nCasa\nCAL-COLCU.CAO\nCASA E DE TIJOLO\nfamuadeC\nLou\nJEcAtoahad\nBIDE\nRUJA\nPObo\n3. Lua dusimh:\nCOCO\nCOLA\nCOPO",
+      "imagem_original": "data/entrada/upload_web/IMG_20260218_194359.jpg",
+      "imagem_pre_processada": "data/processamento/pre_processadas/2a6d91802113479e9bd8c881e7241194/p0001.png",
+      "linhas": [
+        {
+          "numero": 1,
+          "x": 141,
+          "y": 0,
+          "largura": 203,
+          "altura": 33,
+          "texto": "Qaidaddi",
+          "confianca": 0.6187,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 2,
+          "x": 58,
+          "y": 56,
+          "largura": 96,
+          "altura": 30,
+          "texto": "I.Lua",
+          "confianca": 0.5235,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 3,
+          "x": 256,
+          "y": 93,
+          "largura": 97,
+          "altura": 35,
+          "texto": "CASA",
+          "confianca": 0.78,
+          "prioridade": "média"
+        },
+        {
+          "numero": 4,
+          "x": 257,
+          "y": 151,
+          "largura": 95,
+          "altura": 27,
+          "texto": "Casa",
+          "confianca": 0.5359,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 5,
+          "x": 204,
+          "y": 192,
+          "largura": 302,
+          "altura": 41,
+          "texto": "CAL-COLCU.CAO",
+          "confianca": 0.7637,
+          "prioridade": "média"
+        },
+        {
+          "numero": 6,
+          "x": 138,
+          "y": 249,
+          "largura": 361,
+          "altura": 46,
+          "texto": "CASA E DE TIJOLO",
+          "confianca": 0.8237,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 7,
+          "x": 307,
+          "y": 310,
+          "largura": 191,
+          "altura": 36,
+          "texto": "famuadeC",
+          "confianca": 0.6794,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 8,
+          "x": 495,
+          "y": 458,
+          "largura": 57,
+          "altura": 26,
+          "texto": "Lou",
+          "confianca": 0.6074,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 9,
+          "x": 269,
+          "y": 460,
+          "largura": 239,
+          "altura": 28,
+          "texto": "JEcAtoahad",
+          "confianca": 0.5439,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 10,
+          "x": 102,
+          "y": 463,
+          "largura": 66,
+          "altura": 30,
+          "texto": "BIDE",
+          "confianca": 0.6419,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 11,
+          "x": 98,
+          "y": 643,
+          "largura": 72,
+          "altura": 32,
+          "texto": "RUJA",
+          "confianca": 0.6931,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 12,
+          "x": 477,
+          "y": 646,
+          "largura": 174,
+          "altura": 25,
+          "texto": "PObo",
+          "confianca": 0.5635,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 13,
+          "x": 27,
+          "y": 701,
+          "largura": 298,
+          "altura": 42,
+          "texto": "3. Lua dusimh:",
+          "confianca": 0.6707,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 14,
+          "x": 90,
+          "y": 765,
+          "largura": 100,
+          "altura": 31,
+          "texto": "COCO",
+          "confianca": 0.6562,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 15,
+          "x": 297,
+          "y": 772,
+          "largura": 90,
+          "altura": 29,
+          "texto": "COLA",
+          "confianca": 0.785,
+          "prioridade": "média"
+        },
+        {
+          "numero": 16,
+          "x": 504,
+          "y": 774,
+          "largura": 96,
+          "altura": 34,
+          "texto": "COPO",
+          "confianca": 0.5496,
+          "prioridade": "alta"
+        }
+      ]
+    }
+  ]
+}

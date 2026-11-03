@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "criado_em": "2026-09-09T22:25:52.132709-03:00",
+  "documento": {
+    "id": "eb79cfe314284a4dbcd046330bbfce8e",
+    "nome_original": "tmp-fluxo.png",
+    "sha256": "0af4bbe348eb8ff2aa4637f62a4c4958b7c31427822d3e6149718e43ab4b1390",
+    "perfil": "automatico",
+    "status": "concluido",
+    "caminho_original": null
+  },
+  "paginas": [
+    {
+      "numero": 1,
+      "qualidade": {
+        "largura": 600,
+        "altura": 200,
+        "dpi": null,
+        "nitidez": null,
+        "contraste": null
+      },
+      "texto_bruto": "A-A : ili   *B+",
+      "texto_diplomatico": "A-A : ili *B+",
+      "imagem_original": "data/entrada/upload_web/tmp-fluxo.png",
+      "imagem_pre_processada": "data/processamento/pre_processadas/f4cf6cc808ed4390a40f9e5b46b2ba78/p0001.png",
+      "linhas": [
+        {
+          "numero": 1,
+          "x": 40,
+          "y": 82,
+          "largura": 104,
+          "altura": 9,
+          "texto": "A-A : ili *B+",
+          "confianca": 0.5472,
+          "prioridade": "alta"
+        }
+      ]
+    }
+  ],
+  "inventario": null,
+  "preservacao": {
+    "modo": "none",
+    "destino": null,
+    "verificado": false
+  },
+  "artefatos": [
+    {
+      "caminho": "baixa_confianca.csv",
+      "tamanho_bytes": 72,
+      "sha256": "d27d7374665fde04e8091108e6d728089c1c4cc066b70db9031ca38981c31601",
+      "status": "gerado"
+    },
+    {
+      "caminho": "overlays/pagina_0001.png",
+      "tamanho_bytes": 1810,
+      "sha256": "0e8f7088a1c5e627608896049cf4c6151da49c4785f53ecef573aeaea15e5d5e",
+      "status": "gerado"
+    },
+    {
+      "caminho": "tmp-fluxo.hocr",
+      "tamanho_bytes": 257,
+      "sha256": "89842f4fbee10a5b9a23db4739133f9b82b61428abefbcaa28ab301f35e46df8",
+      "status": "gerado"
+    },
+    {
+      "caminho": "tmp-fluxo.json",
+      "tamanho_bytes": 1453,
+      "sha256": "d4e4575fbd044d823b17c27d4416e0ac30853bf6eb90a5016b3bde65083c3198",
+      "status": "gerado"
+    },
+    {
+      "caminho": "tmp-fluxo.md",
+      "tamanho_bytes": 45,
+      "sha256": "620fac8479ffa6eeb15a0bfe1ff00c26b7637fcdad4b533a3e604010d7e4d1b7",
+      "status": "gerado"
+    },
+    {
+      "caminho": "tmp-fluxo.tsv",
+      "tamanho_bytes": 89,
+      "sha256": "444f75b272b02eb0e5fb9d782c16867ab920736a56c0b42b1bbadbf5050849d6",
+      "status": "gerado"
+    },
+    {
+      "caminho": "tmp-fluxo_bruto.txt",
+      "tamanho_bytes": 16,
+      "sha256": "9da2e115a318f258710b42f467a95c43dd9c4616bf50214eae37a0b4eebd4293",
+      "status": "gerado"
+    },
+    {
+      "caminho": "tmp-fluxo_diplomatico.txt",
+      "tamanho_bytes": 14,
+      "sha256": "e3f8f385c1a3aea535e35c38b7dfc0d445829c2004a82e6b6c4c6a60771cc3b4",
+      "status": "gerado"
+    },
+    {
+      "caminho": "tmp-fluxo_page.xml",
+      "tamanho_bytes": 497,
+      "sha256": "cd4f6ec770f0b5b02f63b694f18806a494f4f8ca64c7e94a57f681702239fc95",
+      "status": "gerado"
+    },
+    {
+      "caminho": "tmp-fluxo_relatorio.html",
+      "tamanho_bytes": 747,
+      "sha256": "4a0f9f12f0a31352e5533800e386d902b8c7c2ebd5b5e8190cf218c4646d889a",
+      "status": "gerado"
+    }
+  ],
+  "qualidade": {
+    "paginas": [
+      {
+        "largura": 600,
+        "altura": 200,
+        "dpi": null,
+        "nitidez": null,
+        "contraste": null
+      }
+    ]
+  }
+}

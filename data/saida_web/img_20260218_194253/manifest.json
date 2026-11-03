@@ -1,0 +1,435 @@
+{
+  "schema_version": "1.0",
+  "criado_em": "2026-09-09T22:50:42.836712-03:00",
+  "documento": {
+    "id": "08bb1498d96840a6b3342c01d25597e0",
+    "nome_original": "IMG_20260218_194253.jpg",
+    "sha256": "d62b53ed6281acdb503165fa6811f625df4d2d9126047a73b62575fab05d276b",
+    "perfil": "automatico",
+    "status": "concluido",
+    "caminho_original": null
+  },
+  "paginas": [
+    {
+      "numero": 1,
+      "qualidade": {
+        "largura": 701,
+        "altura": 934,
+        "dpi": 72,
+        "nitidez": null,
+        "contraste": null
+      },
+      "texto_bruto": "4Qismebeu\nE.M.ProfessorWashington Bittencourt\nProf\nTurma :\nAluno (a):\nDATA:\nAtividade\n124\nBANANA\nBA-BE-BI-BO-BU\nba-be-bi-bo-bu\nBa-Ba-3\nBABA\nBOLA\nBEIJO\nBANANA\nBERINJELA\nBELICHE\nBICO\nBICA\nBICUDO\nBULE\nBONECA\nBELISCAO\nBONITO\nBERNARDO\nBISCOITO\nBAILARINA\nBALA\nBORRACHA\nAs BANANAS possuem um formato alongado, uma\ncoloracao amarela ou vermelna e um sabor doce.",
+      "texto_diplomatico": "4Qismebeu\nE.M.ProfessorWashington Bittencourt\nProf\nTurma :\nAluno (a):\nDATA:\nAtividade\n124\nBANANA\nBA-BE-BI-BO-BU\nba-be-bi-bo-bu\nBa-Ba-3\nBABA\nBOLA\nBEIJO\nBANANA\nBERINJELA\nBELICHE\nBICO\nBICA\nBICUDO\nBULE\nBONECA\nBELISCAO\nBONITO\nBERNARDO\nBISCOITO\nBAILARINA\nBALA\nBORRACHA\nAs BANANAS possuem um formato alongado, uma\ncoloracao amarela ou vermelna e um sabor doce.",
+      "imagem_original": "data/entrada/upload_web/IMG_20260218_194253.jpg",
+      "imagem_pre_processada": "data/processamento/pre_processadas/15282f06d4f0434f8b78b3524e9bfa78/p0001.png",
+      "linhas": [
+        {
+          "numero": 1,
+          "x": 69,
+          "y": 22,
+          "largura": 156,
+          "altura": 25,
+          "texto": "4Qismebeu",
+          "confianca": 0.5461,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 2,
+          "x": 226,
+          "y": 233,
+          "largura": 316,
+          "altura": 31,
+          "texto": "E.M.ProfessorWashington Bittencourt",
+          "confianca": 0.9005,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 3,
+          "x": 227,
+          "y": 266,
+          "largura": 45,
+          "altura": 21,
+          "texto": "Prof",
+          "confianca": 0.71,
+          "prioridade": "média"
+        },
+        {
+          "numero": 4,
+          "x": 353,
+          "y": 265,
+          "largura": 67,
+          "altura": 19,
+          "texto": "Turma :",
+          "confianca": 0.7297,
+          "prioridade": "média"
+        },
+        {
+          "numero": 5,
+          "x": 227,
+          "y": 291,
+          "largura": 83,
+          "altura": 23,
+          "texto": "Aluno (a):",
+          "confianca": 0.8955,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 6,
+          "x": 382,
+          "y": 320,
+          "largura": 70,
+          "altura": 22,
+          "texto": "DATA:",
+          "confianca": 0.7513,
+          "prioridade": "média"
+        },
+        {
+          "numero": 7,
+          "x": 199,
+          "y": 323,
+          "largura": 92,
+          "altura": 28,
+          "texto": "Atividade",
+          "confianca": 0.8641,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 8,
+          "x": 511,
+          "y": 315,
+          "largura": 36,
+          "altura": 24,
+          "texto": "124",
+          "confianca": 0.6883,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 9,
+          "x": 448,
+          "y": 490,
+          "largura": 125,
+          "altura": 26,
+          "texto": "BANANA",
+          "confianca": 0.8375,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 10,
+          "x": 126,
+          "y": 514,
+          "largura": 249,
+          "altura": 29,
+          "texto": "BA-BE-BI-BO-BU",
+          "confianca": 0.91,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 11,
+          "x": 126,
+          "y": 536,
+          "largura": 229,
+          "altura": 26,
+          "texto": "ba-be-bi-bo-bu",
+          "confianca": 0.9038,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 12,
+          "x": 125,
+          "y": 558,
+          "largura": 150,
+          "altura": 23,
+          "texto": "Ba-Ba-3",
+          "confianca": 0.5085,
+          "prioridade": "alta"
+        },
+        {
+          "numero": 13,
+          "x": 328,
+          "y": 638,
+          "largura": 65,
+          "altura": 29,
+          "texto": "BABA",
+          "confianca": 0.7192,
+          "prioridade": "média"
+        },
+        {
+          "numero": 14,
+          "x": 187,
+          "y": 645,
+          "largura": 61,
+          "altura": 23,
+          "texto": "BOLA",
+          "confianca": 0.7909,
+          "prioridade": "média"
+        },
+        {
+          "numero": 15,
+          "x": 483,
+          "y": 639,
+          "largura": 66,
+          "altura": 23,
+          "texto": "BEIJO",
+          "confianca": 0.7705,
+          "prioridade": "média"
+        },
+        {
+          "numero": 16,
+          "x": 468,
+          "y": 665,
+          "largura": 94,
+          "altura": 23,
+          "texto": "BANANA",
+          "confianca": 0.8505,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 17,
+          "x": 303,
+          "y": 668,
+          "largura": 121,
+          "altura": 24,
+          "texto": "BERINJELA",
+          "confianca": 0.8406,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 18,
+          "x": 168,
+          "y": 673,
+          "largura": 96,
+          "altura": 23,
+          "texto": "BELICHE",
+          "confianca": 0.8103,
+          "prioridade": "média"
+        },
+        {
+          "numero": 19,
+          "x": 335,
+          "y": 697,
+          "largura": 58,
+          "altura": 22,
+          "texto": "BICO",
+          "confianca": 0.788,
+          "prioridade": "média"
+        },
+        {
+          "numero": 20,
+          "x": 189,
+          "y": 697,
+          "largura": 57,
+          "altura": 27,
+          "texto": "BICA",
+          "confianca": 0.7889,
+          "prioridade": "média"
+        },
+        {
+          "numero": 21,
+          "x": 474,
+          "y": 692,
+          "largura": 93,
+          "altura": 23,
+          "texto": "BICUDO",
+          "confianca": 0.7889,
+          "prioridade": "média"
+        },
+        {
+          "numero": 22,
+          "x": 334,
+          "y": 724,
+          "largura": 61,
+          "altura": 24,
+          "texto": "BULE",
+          "confianca": 0.7925,
+          "prioridade": "média"
+        },
+        {
+          "numero": 23,
+          "x": 167,
+          "y": 729,
+          "largura": 95,
+          "altura": 22,
+          "texto": "BONECA",
+          "confianca": 0.8527,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 24,
+          "x": 465,
+          "y": 718,
+          "largura": 115,
+          "altura": 26,
+          "texto": "BELISCAO",
+          "confianca": 0.8374,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 25,
+          "x": 320,
+          "y": 752,
+          "largura": 91,
+          "altura": 24,
+          "texto": "BONITO",
+          "confianca": 0.8458,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 26,
+          "x": 149,
+          "y": 756,
+          "largura": 128,
+          "altura": 23,
+          "texto": "BERNARDO",
+          "confianca": 0.8817,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 27,
+          "x": 469,
+          "y": 747,
+          "largura": 108,
+          "altura": 24,
+          "texto": "BISCOITO",
+          "confianca": 0.8306,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 28,
+          "x": 303,
+          "y": 780,
+          "largura": 126,
+          "altura": 25,
+          "texto": "BAILARINA",
+          "confianca": 0.8937,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 29,
+          "x": 185,
+          "y": 787,
+          "largura": 61,
+          "altura": 20,
+          "texto": "BALA",
+          "confianca": 0.7919,
+          "prioridade": "média"
+        },
+        {
+          "numero": 30,
+          "x": 464,
+          "y": 776,
+          "largura": 127,
+          "altura": 25,
+          "texto": "BORRACHA",
+          "confianca": 0.8525,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 31,
+          "x": 120,
+          "y": 823,
+          "largura": 501,
+          "altura": 36,
+          "texto": "As BANANAS possuem um formato alongado, uma",
+          "confianca": 0.9162,
+          "prioridade": "baixa"
+        },
+        {
+          "numero": 32,
+          "x": 123,
+          "y": 844,
+          "largura": 492,
+          "altura": 35,
+          "texto": "coloracao amarela ou vermelna e um sabor doce.",
+          "confianca": 0.9011,
+          "prioridade": "baixa"
+        }
+      ]
+    }
+  ],
+  "inventario": null,
+  "preservacao": {
+    "modo": "none",
+    "destino": null,
+    "verificado": false
+  },
+  "artefatos": [
+    {
+      "caminho": "baixa_confianca.csv",
+      "tamanho_bytes": 419,
+      "sha256": "b3d5a7314084820664883402947cfa1e80871e4ec29d2d5d34f61d068459cf04",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253.hocr",
+      "tamanho_bytes": 3379,
+      "sha256": "915aad0802693121545c95a7d09e28c6bd2402849c025c116a9524c856e33367",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253.json",
+      "tamanho_bytes": 9363,
+      "sha256": "b451b68ca87da1f9339d3a7d7e17b32da30c6e61ce22e8690a37854fbd81f4f9",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253.md",
+      "tamanho_bytes": 395,
+      "sha256": "45c6a2dc0d775d6553c6993807b6e2caf5b78877c9e27d5b4c5a690e74adf761",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253.tsv",
+      "tamanho_bytes": 1267,
+      "sha256": "0200c65ac941158163c3a998da1d87a8c5f8cc56151056fcd87d0fffa530efa3",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253_bruto.txt",
+      "tamanho_bytes": 354,
+      "sha256": "0a3a4259da1773e932eaa108fcbe10781a81bc18c27dd20f8e201616588dfc57",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253_diplomatico.txt",
+      "tamanho_bytes": 354,
+      "sha256": "0a3a4259da1773e932eaa108fcbe10781a81bc18c27dd20f8e201616588dfc57",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253_page.xml",
+      "tamanho_bytes": 5112,
+      "sha256": "6f66fe02022497e7a3725c26ceb00c427ee7c827f28f85d3148d88f9c4648f22",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253_pesquisavel.pdf",
+      "tamanho_bytes": 142253,
+      "sha256": "e78060f7194f2500ccd34f63dd82c8ed96a25e80791de36282258358ed077cea",
+      "status": "gerado"
+    },
+    {
+      "caminho": "img_20260218_194253_relatorio.html",
+      "tamanho_bytes": 3400,
+      "sha256": "0aa1b7d7d7fceb902dd8c7df76bd19005f2d0c2c730df1b3abac5e5661c89072",
+      "status": "gerado"
+    },
+    {
+      "caminho": "overlays/pagina_0001.png",
+      "tamanho_bytes": 371451,
+      "sha256": "d7857dc05753a7167e978358575cc873b5be6d970af5882491502408c921f6c3",
+      "status": "gerado"
+    }
+  ],
+  "qualidade": {
+    "paginas": [
+      {
+        "largura": 701,
+        "altura": 934,
+        "dpi": 72,
+        "nitidez": null,
+        "contraste": null
+      }
+    ]
+  }
+}
