@@ -1,0 +1,26 @@
+perfil: impresso_moderno
+render_dpi: 300
+preprocessamento:
+  grayscale: true
+  deskew: true
+  clahe: false
+  denoise: leve
+  remover_fundo: false
+  upscale: 1.0
+  binarizacao: false
+reconhecimento:
+  engine: tesseract
+  idioma: por
+  oem: 1
+  psm: 3
+  modelo: best
+confianca:
+  limiar_alta: 0.70
+  limiar_revisao: 0.82
+llm:
+  enabled: false
+  provider: ollama
+  model: qwen2.5:7b-instruct
+  base_url: http://127.0.0.1:11434
+  timeout_seconds: 120
+  mode: suggest_only

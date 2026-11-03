@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import os
+import re
+from importlib import resources as _resources
 from pathlib import Path
 from typing import Any
 
@@ -27,6 +30,7 @@ class ReconhecimentoConfig(BaseModel):
     oem: int = Field(default=1, ge=0, le=3)
     psm: int = Field(default=3, ge=3, le=13)
     modelo: str = "best"
+    timeout_segundos: int = Field(default=300, gt=0, le=3600)
 
 
 class ConfiancaConfig(BaseModel):
@@ -176,6 +180,35 @@ class AppConfig(BaseModel):
     # compat: mantém leitura de YAMLs antigos com `paddlevl`
     paddlevl: Qwen3VLConfig | None = None
 
+    @field_validator("entrada", "saida", "banco", mode="before")
+    @classmethod
+    def _expande_home(cls, valor: Any) -> Any:
+        if isinstance(valor, str) and valor.startswith("~"):
+            return Path(valor).expanduser()
+        return valor
+
+
+_VAR_ENV_RE = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)(?::([^}]*))?\}")
+
+
+def _resolver_variaveis_ambiente(texto: str) -> str:
+    """Substitui ``${VAR:default}`` e ``${VAR}`` por valores de ambiente.
+
+    Variáveis não definidas sem valor padrão ficam inalteradas, permitindo que
+    o Pydantic reporte o erro de validação apropriado.
+    """
+
+    def _substituir(match: re.Match[str]) -> str:
+        nome = match.group(1)
+        padrao = match.group(2)
+        if nome in os.environ:
+            return os.environ[nome]
+        if padrao is not None:
+            return padrao
+        return match.group(0)
+
+    return _VAR_ENV_RE.sub(_substituir, texto)
+
 
 def carregar_config(caminho: Path | str) -> AppConfig:
     caminho = Path(caminho)
@@ -183,7 +216,11 @@ def carregar_config(caminho: Path | str) -> AppConfig:
         raise FileNotFoundError(f"Arquivo de configuração não encontrado: {caminho}")
     try:
         with caminho.open("r", encoding="utf-8") as arquivo:
-            dados: Any = yaml.safe_load(arquivo) or {}
+            bruto = arquivo.read()
+    except OSError as erro:
+        raise ValueError(f"Não foi possível ler {caminho}: {erro}") from erro
+    try:
+        dados: Any = yaml.safe_load(_resolver_variaveis_ambiente(bruto)) or {}
     except yaml.YAMLError as erro:
         raise ValueError(f"YAML inválido em {caminho}: {erro}") from erro
     if not isinstance(dados, dict):
@@ -196,3 +233,45 @@ def carregar_config(caminho: Path | str) -> AppConfig:
 
 def config_padrao_embutida() -> AppConfig:
     return AppConfig()
+
+
+_PAQUETE_CONFIGS = "ocr_historico.configs"
+
+
+def raiz_projeto() -> Path:
+    """Retorna a raiz do repositório (dois níveis acima deste módulo)."""
+    return Path(__file__).resolve().parents[2]
+
+
+def _caminho_configs_pacote(nome: str = "default.yaml") -> Path | None:
+    """Localiza um YAML de configuração empacotado via ``importlib.resources``.
+
+    Funciona quando o projeto está instalado (wheel ou ``pip install -e``) e o
+    diretório ``configs/`` foi incluído como package data. Retorna ``None`` se
+    não houver recurso empacotado (execução direta do código-fonte sem
+    instalação), deixando o chamador decidir o fallback.
+    """
+    try:
+        _resources.files(_PAQUETE_CONFIGS).joinpath(nome)
+        return Path(_resources.files(_PAQUETE_CONFIGS).joinpath(nome))
+    except (FileNotFoundError, ModuleNotFoundError, OSError):
+        return None
+
+
+def caminho_config_padrao() -> Path:
+    """Resolve o arquivo de configuração padrão.
+
+    Ordem de resolução:
+    1. recurso empacotado ``ocr_historico/configs/default.yaml`` (instalação
+       normal ou editável com package data);
+    2. ``<raiz_projeto>/configs/default.yaml`` (código-fonte);
+    3. arquivo padrão ``~/.config/ocr-historico/default.yaml`` (usuário, sem
+       falhar se ainda não existir).
+    """
+    empacotado = _caminho_configs_pacote("default.yaml")
+    if empacotado is not None:
+        return empacotado
+    fonte = raiz_projeto() / "configs" / "default.yaml"
+    if fonte.is_file():
+        return fonte
+    return Path.home() / ".config" / "ocr-historico" / "default.yaml"

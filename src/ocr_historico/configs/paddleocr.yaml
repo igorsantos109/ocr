@@ -1,0 +1,15 @@
+# PaddleOCR clássico local (PP-OCR). Nenhum modelo é baixado por padrão.
+perfil: impresso_historico
+reconhecimento:
+  engine: paddleocr
+  idioma: por
+paddleocr:
+  idioma: pt
+  dispositivo: cpu
+  backend: auto  # auto usa ONNX em CPUs sem AVX2; use paddle para forçar Paddle
+  use_angle_cls: true
+  allow_download: false
+  # Para modo totalmente offline, aponte para modelos locais:
+  # det_model_dir: data/modelos/paddleocr/det
+  # rec_model_dir: data/modelos/paddleocr/rec
+  # cls_model_dir: data/modelos/paddleocr/cls

@@ -1,0 +1,33 @@
+# Perfil VL Qwen3-VL 4B: leve e rápido para documentos históricos.
+# Backend: Qwen3-VL-4B (ou fallback 8B) em :8082 (bash scripts/servidor_qwen3vl_4b.sh).
+perfil: misto
+render_dpi: 300
+preprocessamento:
+  grayscale: true
+  deskew: true
+  clahe: false
+  denoise: leve
+  remover_fundo: false
+  upscale: 1.0
+  binarizacao: false
+reconhecimento:
+  engine: qwen3_vl
+  idioma: por
+  oem: 1
+  psm: 3
+  modelo: Qwen3VL-4B-Instruct
+confianca:
+  limiar_alta: 0.70
+  limiar_revisao: 0.82
+llm:
+  enabled: false
+  provider: ollama
+  model: qwen2.5:7b-instruct
+  base_url: http://127.0.0.1:11434
+  timeout_seconds: 120
+  mode: suggest_only
+qwen3vl:
+  base_url: http://127.0.0.1:8082
+  model: Qwen3VL-4B-Instruct
+  timeout_seconds: 300
+  max_lado_px: 1024

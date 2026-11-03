@@ -10,8 +10,6 @@ from pathlib import Path
 
 from .base import LinhaRec, MotorIndisponivel, MotorPagina, RecognitionConfig, ResultadoPagina
 
-TIMEOUT_SEGUNDOS = 300
-
 
 def _parse_tsv(saida: str) -> tuple[str, list[LinhaRec], float | None]:
     leitor = csv.DictReader(io.StringIO(saida), delimiter="\t")
@@ -58,7 +56,10 @@ class TesseractEngine(MotorPagina):
         return shutil.which("tesseract") is not None
 
     def recognize_page(
-        self, image_path: Path | str, config: RecognitionConfig, numero_pagina: int = 1
+        self,
+        image_path: Path | str,
+        config: RecognitionConfig,
+        numero_pagina: int = 1,
     ) -> ResultadoPagina:
         if not self.available():
             raise MotorIndisponivel(
@@ -76,10 +77,11 @@ class TesseractEngine(MotorPagina):
             str(config.psm),
             "tsv",
         ]
+        timeout = int(config.timeout_segundos or 300)
         try:
-            processo = subprocess.run(comando, capture_output=True, text=True, check=False, timeout=TIMEOUT_SEGUNDOS)
+            processo = subprocess.run(comando, capture_output=True, text=True, check=False, timeout=timeout)
         except subprocess.TimeoutExpired as erro:
-            raise MotorIndisponivel(f"Tesseract excedeu {TIMEOUT_SEGUNDOS}s em {image_path}.") from erro
+            raise MotorIndisponivel(f"Tesseract excedeu {timeout}s em {image_path}.") from erro
         except OSError as erro:
             raise MotorIndisponivel(f"Falha ao executar o Tesseract: {erro}") from erro
         if processo.returncode != 0:

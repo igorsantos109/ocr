@@ -25,7 +25,7 @@ dev = ["pytest>=8.0", "ruff>=0.4", "mypy>=1.9"]
 gui = ["playwright>=1.45"]
 ocr = ["pytesseract>=0.3.10", "ocrmypdf>=16.0"]
 htr = ["kraken>=5.0"]
-paddle = ["paddleocr>=3.7,<3.8", "paddlepaddle>=3.3,<3.4", "rapidocr_onnxruntime>=1.2,<1.3"]
+paddle = ["paddleocr>=3.7", "paddlepaddle>=3.3", "rapidocr_onnxruntime>=1.2,<1.3"]  # superiores relaxados: sem incompatibilidade conhecida documentada
 web = ["gradio>=4.0"]
 
 [project.scripts]
@@ -33,6 +33,10 @@ ocrhist = "ocr_historico.cli:app"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["ocr_historico*"]
+
+[tool.setuptools.package-data]
+ocr_historico = ["configs/*.yaml", "py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

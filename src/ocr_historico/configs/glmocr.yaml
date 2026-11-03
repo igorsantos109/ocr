@@ -1,0 +1,33 @@
+# Perfil GLM-OCR: alta precisão em layout/tabelas.
+# Backend: GLM-OCR (ou fallback Qwen3-VL) em :8082 (bash scripts/servidor_glmocr.sh).
+perfil: misto
+render_dpi: 300
+preprocessamento:
+  grayscale: true
+  deskew: true
+  clahe: false
+  denoise: leve
+  remover_fundo: false
+  upscale: 1.0
+  binarizacao: false
+reconhecimento:
+  engine: glm_ocr
+  idioma: por
+  oem: 1
+  psm: 3
+  modelo: GLM-OCR
+confianca:
+  limiar_alta: 0.70
+  limiar_revisao: 0.82
+llm:
+  enabled: false
+  provider: ollama
+  model: qwen2.5:7b-instruct
+  base_url: http://127.0.0.1:11434
+  timeout_seconds: 120
+  mode: suggest_only
+glmocr:
+  base_url: http://127.0.0.1:8082
+  model: GLM-OCR
+  timeout_seconds: 300
+  max_lado_px: 1024
