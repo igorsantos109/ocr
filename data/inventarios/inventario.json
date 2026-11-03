@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "entrada": "/home/igor/ia-sh/OCR/data/entrada/upload_web/IMG_20260218_194359.jpg",
+  "criado_em": "2026-09-20T20:32:32.842281-03:00",
+  "resumo": {
+    "total": 1,
+    "suportados": 1,
+    "ignorados": 0
+  },
+  "itens": [
+    {
+      "caminho": "/home/igor/ia-sh/OCR/data/entrada/upload_web/IMG_20260218_194359.jpg",
+      "caminho_relativo": "IMG_20260218_194359.jpg",
+      "nome": "IMG_20260218_194359.jpg",
+      "extensao": ".jpg",
+      "tipo": "imagem",
+      "suportado": true,
+      "tamanho_bytes": 106933,
+      "mtime_ns": 1789000729264575834,
+      "sha256": "88a65cbade56601bcfa49939145c19352947210b3baa77565525638394937947",
+      "motivo_ignorado": null,
+      "erro": null
+    }
+  ]
+}
