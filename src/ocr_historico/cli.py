@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import Annotated
 
@@ -12,6 +13,8 @@ from pydantic import ValidationError
 from .config import AppConfig, carregar_config
 from .database import fabrica_sessoes, inicializar_banco
 from .diagnostico import coletar_diagnostico, diagnostico_para_json
+
+logger = logging.getLogger("ocr_historico")
 
 app = typer.Typer(
     name="ocrhist",
@@ -29,8 +32,20 @@ app.add_typer(treinar_app, name="treinar")
 @app.callback()
 def callback(
     version: Annotated[bool, typer.Option("--version", help="Exibe a versão instalada.")] = False,
+    log_nivel: Annotated[
+        str,
+        typer.Option(
+            "--log-nivel",
+            help="Nível de log: DEBUG, INFO, WARNING, ERROR (padrão: INFO).",
+        ),
+    ] = "INFO",
 ) -> None:
     """Comandos de fundação do OCR Histórico BR."""
+    from .logging_config import configurar_logging
+
+    configurar_logging(jsonl=False)
+    nivel = getattr(logging, log_nivel.upper(), logging.INFO)
+    logging.getLogger("ocr_historico").setLevel(nivel)
     if version:
         from . import __version__
 
@@ -44,6 +59,23 @@ def raiz_projeto() -> Path:
 
 def caminho_config_padrao() -> Path:
     return raiz_projeto() / "configs" / "default.yaml"
+
+
+def _caminho_entrada_valido(caminho: Path) -> Path:
+    """Valida que o caminho de entrada existe e é arquivo ou diretório.
+
+    Retorna o caminho resolvido. Levanta ``typer.BadParameter`` com mensagem
+    amigável (sem stack trace) para erros de uso do CLI.
+    """
+    base = Path(caminho).expanduser()
+    if not base.exists():
+        raise typer.BadParameter(f"Caminho de entrada não encontrado: {base}", param_hint="CAMINHO")
+    if not (base.is_file() or base.is_dir()):
+        raise typer.BadParameter(
+            f"Caminho de entrada não é arquivo nem diretório: {base}",
+            param_hint="CAMINHO",
+        )
+    return base
 
 
 def obter_config(caminho: Path | None) -> AppConfig:
@@ -77,6 +109,7 @@ def inventariar(
     """Gera inventário CSV/JSON sem executar OCR e sem alterar a entrada."""
     from .ingestao.inventario import inventariar_entrada, salvar_inventario
 
+    caminho = _caminho_entrada_valido(caminho)
     try:
         resultado = inventariar_entrada(caminho, calcular_hash=not sem_hash)
         arquivos = salvar_inventario(resultado, destino or Path("inventario"))
@@ -178,6 +211,7 @@ def processar(
 
     from .ingestao import ingerir_entrada
 
+    caminho = _caminho_entrada_valido(caminho)
     try:
         dados = aplicar_perfil(obter_config(config), perfil or "automatico")
     except (FileNotFoundError, ValueError, ValidationError) as erro:
@@ -439,8 +473,12 @@ def sugerir(
         typer.echo("ERRO: máximo 20 linhas por chamada (envie em partes para revisão consciente).")
         raise typer.Exit(code=2)
     resultados = sugerir_linhas(
-        dados.banco, ids, base_url=dados.llm.base_url, model=dados.llm.model,
-        timeout_seconds=dados.llm.timeout_seconds, usuario=usuario,
+        dados.banco,
+        ids,
+        base_url=dados.llm.base_url,
+        model=dados.llm.model,
+        timeout_seconds=dados.llm.timeout_seconds,
+        usuario=usuario,
     )
     ok = 0
     for res in resultados:

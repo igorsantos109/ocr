@@ -1,0 +1,26 @@
+perfil: jornal
+render_dpi: 400
+preprocessamento:
+  grayscale: true
+  deskew: true
+  clahe: true
+  denoise: leve
+  remover_fundo: true
+  upscale: 1.25
+  binarizacao: false
+reconhecimento:
+  engine: tesseract
+  idioma: por
+  oem: 1
+  psm: 4
+  modelo: best
+confianca:
+  limiar_alta: 0.70
+  limiar_revisao: 0.82
+llm:
+  enabled: false
+  provider: ollama
+  model: qwen2.5:7b-instruct
+  base_url: http://127.0.0.1:11434
+  timeout_seconds: 120
+  mode: suggest_only

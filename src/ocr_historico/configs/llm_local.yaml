@@ -1,0 +1,7 @@
+llm:
+  enabled: false
+  provider: ollama
+  model: qwen2.5:7b-instruct
+  base_url: http://127.0.0.1:11434
+  timeout_seconds: 120
+  mode: suggest_only

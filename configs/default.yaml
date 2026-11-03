@@ -1,7 +1,7 @@
 perfil: automatico
 render_dpi: 300
-entrada: /home/igor/Desktop/OCRENTRADA
-saida: /home/igor/Desktop/OCRSAIDA
+entrada: ${OCRHIST_ENTRADA:~/Área de trabalho/OCRENTRADA}
+saida: ${OCRHIST_SAIDA:~/Área de trabalho/OCRSAIDA}
 banco: data/ocr_historico.sqlite3
 preprocessamento:
   grayscale: true

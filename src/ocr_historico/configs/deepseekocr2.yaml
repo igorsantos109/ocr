@@ -1,0 +1,10 @@
+# Perfil do motor experimental deepseek_ocr2 (DeepSeek-OCR-2 local via llama-server).
+# Uso: ocrhist processar doc.tif --engine deepseek_ocr2 --config configs/deepseekocr2.yaml
+reconhecimento:
+  engine: deepseek_ocr2
+  idioma: por
+deepseekocr2:
+  base_url: "http://127.0.0.1:8084"
+  model: "DeepSeek-OCR-2"
+  timeout_seconds: 600
+  max_lado_px: 1540

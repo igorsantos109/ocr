@@ -72,7 +72,7 @@ O comando informa Python, ambiente virtual, Tesseract/idioma `por`, Poppler, PyM
 
 ## Configuração e pastas
 
-O arquivo inicial é `configs/default.yaml`. Os padrões documentais estão em `configs/`. Os caminhos padrão são `/home/igor/Desktop/OCRENTRADA` e `/home/igor/Desktop/OCRSAIDA`, mas podem ser alterados no YAML. `setup` não cria esses diretórios automaticamente:
+O arquivo inicial é `configs/default.yaml`. Os padrões documentais estão em `configs/`. Os caminhos padrão são `~/Área de trabalho/OCRENTRADA` e `~/Área de trabalho/OCRSAIDA` e podem ser sobrescritos no YAML ou pelas variáveis de ambiente `OCRHIST_ENTRADA` / `OCRHIST_SAIDA` (sintaxe `${VAR:default}`). `setup` não cria esses diretórios automaticamente:
 
 ```bash
 .venv/bin/ocrhist setup
@@ -81,6 +81,29 @@ O arquivo inicial é `configs/default.yaml`. Os padrões documentais estão em `
 ```
 
 O banco padrão é `data/ocr_historico.sqlite3`. Nenhum conteúdo existente é apagado ou sobrescrito.
+
+### Resolução da configuração padrão
+
+O CLI localiza `configs/default.yaml` por esta ordem:
+
+1. recurso empacotado `ocr_historico/configs/default.yaml` (instalação normal ou `pip install -e .`);
+2. `<raiz_do_projeto>/configs/default.yaml` (execução a partir do código-fonte);
+3. `~/.config/ocr-historico/default.yaml` (usuário, sem falhar se ainda não existir).
+
+Isso garante que `ocrhist setup` e `ocrhist diagnosticar` funcionem tanto em instalação editável quanto em instalação normal (`pip install .`).
+
+### Tabela de motores e pré-requisitos
+
+| Motor | Cenário | Pré-requisitos | Observações |
+|-------|---------|----------------|-------------|
+| tesseract | impresso/datilografado | `tesseract-ocr`, `tesseract-ocr-por`, Poppler | CPU-first, estável |
+| paddleocr | impresso, tabelas | `paddleocr`, `paddlepaddle` CPU ou `rapidocr_onnxruntime` | `allow_download: false`; modelos locais em `data/modelos/paddleocr/` |
+| kraken | manuscrito HTR | `kraken`, modelo `.mlmodel` treinado | sem modelo, cai para tesseract |
+| qwen3_vl / glm_ocr / olmocr | VLM visão | servidor `llama-server` local (:8082) | `llm.enabled` não afeta OCR |
+| deepseek_ocr2 | documentos MoE | servidor local (:8084) | porta própria |
+
+Motores opcionais (Surya, Calamari) requerem pacotes + modelos explícitos. Nenhum modelo é baixado silenciosamente.
+
 
 ## Testes, lint e tipagem
 
